@@ -7,6 +7,7 @@ import mangas from "../routers/manga";
 import images from "../routers/images";
 import chapters from "../routers/chapter";
 import kiryu from "../routers/kiryu";
+import sitemaps from "../routers/sitemaps";
 import appRoutes from "../routers/app";
 
 const api = new Hono().basePath("/api");
@@ -22,6 +23,7 @@ api.route("/mangas", mangas);
 api.route("/images", images);
 api.route("/chapters", chapters);
 api.route("/kiryu", kiryu);
+api.route("/sitemaps", sitemaps);
 app.route("/", api);
 
 const port = parseInt(process.env.PORT || "3000") || 3000;

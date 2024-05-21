@@ -33,7 +33,6 @@ export const createManga = async (c: any) => {
 
 export const getNewManga = async (c: any) => {
   try {
-    console.log("hh");
     const mangas = await newManga();
     return c.json(mangas, 200);
   } catch (error) {

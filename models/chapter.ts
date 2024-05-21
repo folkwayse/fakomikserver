@@ -1,6 +1,5 @@
 import { prisma } from "../utils/prisma";
 import { makeAslug } from "../utils/slug";
-
 export const addNewChapter = async (mangaId: string, data: any) => {
   try {
     const slug = makeAslug(data.name);
@@ -44,6 +43,7 @@ export const ChapterBySlug = async (slug: string) => {
         },
       },
     });
+
     return chapter;
   } catch (error) {
     return error;
@@ -52,49 +52,53 @@ export const ChapterBySlug = async (slug: string) => {
   }
 };
 
-export const prevChapter = async (slug: string) => {
-  try {
-    const chapter = await prisma.chapter.findFirst({
-      where: {
-        slug: {
-          lt: slug,
-        },
-      },
-      select: {
-        name: true,
-        slug: true,
-      },
-      orderBy: {
-        slug: "desc",
-      },
-    });
-    return chapter;
-  } catch (error) {
-    return error;
-  } finally {
-    await prisma.$disconnect();
-  }
-};
 
-export const nextChapter = async (slug: string) => {
+/**
+ * Retrieves the previous and next chapters for a given chapter slug.
+ *
+ * @param {string} slug - The slug of the chapter.
+ * @return {Promise<{ prev: Chapter | null, next: Chapter | null }>} - An object containing the previous and next chapters, or null if they don't exist.
+ * @throws {Error} - If there is an error fetching the chapter.
+ */
+
+
+export const prevNextChapter = async (slug: string) => {
   try {
-    const chapter = await prisma.chapter.findFirst({
+    
+    //get all chapters with same manga id by slug
+    const manga = await prisma.chapter.findUnique({
       where: {
-        slug: {
-          gt: slug,
-        },
+        slug,
       },
       select: {
-        name: true,
-        slug: true,
-      },
-      orderBy: {
-        slug: "asc",
+      manga_id: true,
       },
     });
-    return chapter;
+
+    const chapters = await prisma.chapter.findMany({
+      where: {
+        manga_id: manga?.manga_id,
+      },
+      orderBy: {
+        chapter_number: "asc",
+      },
+      select: {
+        slug:true,
+        chapter_number: true,
+      }
+    });
+
+    const chapterIndex = chapters.findIndex((chapter) => chapter.slug === slug);
+    const prevChapter = chapters[chapterIndex - 1];
+    const nextChapter = chapters[chapterIndex + 1];
+   
+    return {
+      prev : prevChapter || null,
+      next : nextChapter || null
+    };
   } catch (error) {
-    return error;
+    console.error("Error fetching chapter:", error);
+    return error
   } finally {
     await prisma.$disconnect();
   }
@@ -130,3 +134,21 @@ export const chapterTitle = async (slug: string) => {
     await prisma.$disconnect();
   }
 };
+
+
+export const allSlugOnly = async () => {
+  try {
+    const chapters = await prisma.chapter.findMany({
+      select: {
+        slug: true,
+        updatedAt: true,
+      },
+    })
+    return chapters
+  } catch (error) {
+    console.error("Error fetching chapter:", error);
+    return { error: "An error occurred while fetching the chapter." };
+  }finally{
+    await prisma.$disconnect();
+  }
+}

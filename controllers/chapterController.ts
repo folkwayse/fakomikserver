@@ -1,9 +1,8 @@
 import {
   addNewChapter,
   ChapterBySlug,
-  prevChapter,
-  nextChapter,
-  chapterTitle
+  prevNextChapter,
+  chapterTitle,
 } from "../models/chapter";
 
 export const addChapter = async (c: any) => {
@@ -32,12 +31,11 @@ export const getChapterBySlug = async (c: any) => {
 
 export const getPrevNextChapter = async (c: any) => {
   const slug = await c.req.param("slug");
-  const prev = await prevChapter(slug) || null;
-  const next = await nextChapter(slug) || null;
+  const data  = await prevNextChapter(slug);
+  
   return c.json(
     {
-      prev,
-      next,
+      ...data
     },
     200
   );
@@ -52,4 +50,4 @@ export const getTitle = async (c: any) => {
     },
     200
   );
-}
+};
