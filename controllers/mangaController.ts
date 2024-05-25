@@ -25,7 +25,7 @@ export const createManga = async (c: any) => {
   const data = await c.req.json();
   const manga = await createNewManga(data);
   try {
-    return c.json(data, 200);
+    return c.json(manga, 200);
   } catch (error) {
     return c.json(error, 500);
   }

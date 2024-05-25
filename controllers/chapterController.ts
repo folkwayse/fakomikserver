@@ -8,7 +8,6 @@ import {
 export const addChapter = async (c: any) => {
   const mangaId = await c.req.param("mangaId");
   const data = await c.req.json();
-  console.log(mangaId, data);
   const Chapter = await addNewChapter(mangaId, data);
   return c.json(
     {

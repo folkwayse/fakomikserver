@@ -3,6 +3,7 @@ import { makeAslug } from "../utils/slug";
 export const addNewChapter = async (mangaId: string, data: any) => {
   try {
     const slug = makeAslug(data.name);
+    console.log(slug);
     const chapter = await prisma.chapter.create({
       data: {
         ...data,
@@ -113,12 +114,7 @@ export const chapterTitle = async (slug: string) => {
       select: {
         name: true,
         slug: true,
-        manga: {
-          select: {
-            title: true,
-            slug: true,
-          },
-        },
+        manga: true,
       },
     });
 

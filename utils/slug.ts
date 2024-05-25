@@ -11,6 +11,9 @@ export const makeAslug = (name: string): string => {
   // Remove accents
   slug = removeAccents(slug);
 
+  // Replace "." with "koma"
+  slug = slug.replace(/\./g, "koma");
+
   // Replace spaces and special characters with hyphens
   slug = slug.replace(/\s+/g, "-");
 

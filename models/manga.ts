@@ -2,7 +2,11 @@ import { prisma } from "../utils/prisma";
 import { makeAslug } from "../utils/slug";
 export const AllMangas = async (): Promise<any> => {
   try {
-    return prisma.manga.findMany({});
+    return prisma.manga.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   } catch (error) {
     return error;
   } finally {
@@ -21,7 +25,7 @@ export const createNewManga = async (manga: any): Promise<any> => {
     const newManga = await prisma.manga.create({
       data: {
         ...manga,
-        rating: 0,
+        rating : manga.rating <10 ? manga.rating*10 : manga.rating,
         start_chapters: "",
         last_chapters: "",
         views: 0,
