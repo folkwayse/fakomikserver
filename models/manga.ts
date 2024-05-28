@@ -25,7 +25,7 @@ export const createNewManga = async (manga: any): Promise<any> => {
     const newManga = await prisma.manga.create({
       data: {
         ...manga,
-        rating : manga.rating <10 ? manga.rating*10 : manga.rating,
+        rating: manga.rating < 10 ? manga.rating * 10 : manga.rating,
         start_chapters: "",
         last_chapters: "",
         views: 0,
@@ -125,6 +125,36 @@ export const mangaBySlug = async (slug: string): Promise<any> => {
       },
     });
     return manga;
+  } catch (error) {
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+export const mangaByName = async (s: string): Promise<any> => {
+  try {
+    const mangas = await prisma.manga.findMany({
+      where: {
+        title: {
+          contains: s,
+          mode: 'insensitive', 
+        },
+
+      },
+      select: {
+        title: true,
+        type: true,
+        // status: true,
+        last_chapters: true,
+        rating: true,
+        // views: true,
+        poster: true,
+        // createdAt: true,
+        slug: true,
+      },
+    });
+    return mangas;
   } catch (error) {
     return error;
   } finally {

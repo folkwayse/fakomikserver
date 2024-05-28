@@ -4,7 +4,8 @@ import {
   createManga,
   getMangaById,
   getNewManga,
-  getMangaBySlug
+  getMangaBySlug,
+  searchByName
 } from "../controllers/mangaController";
 import { addChapter } from "../controllers/chapterController";
 
@@ -15,6 +16,9 @@ mangas.get("/", async (c) => {
 });
 mangas.get("/newmanga", async (c) => {
   return await getNewManga(c);
+});
+mangas.post("/searchbyname", async (c) => {
+  return await searchByName(c);
 });
 mangas.get("/getmanga/:slug", async (c) => {
   return await getMangaBySlug(c);

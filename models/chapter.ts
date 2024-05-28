@@ -54,12 +54,7 @@ export const ChapterBySlug = async (slug: string) => {
         slug,
       },
       include: {
-        manga: {
-          select: {
-            title: true,
-            slug: true,
-          },
-        },
+        manga: true,
       },
     });
 

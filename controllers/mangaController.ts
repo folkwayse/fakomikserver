@@ -4,8 +4,15 @@ import {
   MangaById,
   newManga,
   mangaBySlug,
+  mangaByName
 } from "../models/manga";
 
+export const searchByName = async (c: any) => {
+  const {s} = await c.req.json();
+  // console.log(s)
+  const mangas = await mangaByName(s);
+  return c.json(mangas, 200);
+}
 export const getMangas = async (c: any) => {
   const genres = await AllMangas();
   return c.json(genres, 200);

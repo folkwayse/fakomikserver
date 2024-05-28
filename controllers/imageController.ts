@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 //   secretKey: process.env.MINIO_SECRET_KEY || 'default',
 // });
 
-console.log(process.env.ACCESS_KEY_ID);
+
 const s3Client = new S3Client({
   region: "default",
   endpoint: process.env.ENDPOINT, // Contabo S3 endpoint
