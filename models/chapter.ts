@@ -29,6 +29,24 @@ export const addNewChapter = async (mangaId: string, data: any) => {
   }
 };
 
+export const isSlugExists = async (title: string) => {
+
+  try {
+    const slug = makeAslug(title);
+    const chapter = await prisma.chapter.findUnique({
+      where: {
+        slug,
+      },
+    });
+
+    return !!chapter;
+  } catch (error) {
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
 export const ChapterBySlug = async (slug: string) => {
   try {
     const chapter = await prisma.chapter.findUnique({
@@ -53,7 +71,6 @@ export const ChapterBySlug = async (slug: string) => {
   }
 };
 
-
 /**
  * Retrieves the previous and next chapters for a given chapter slug.
  *
@@ -62,17 +79,15 @@ export const ChapterBySlug = async (slug: string) => {
  * @throws {Error} - If there is an error fetching the chapter.
  */
 
-
 export const prevNextChapter = async (slug: string) => {
   try {
-    
     //get all chapters with same manga id by slug
     const manga = await prisma.chapter.findUnique({
       where: {
         slug,
       },
       select: {
-      manga_id: true,
+        manga_id: true,
       },
     });
 
@@ -84,22 +99,22 @@ export const prevNextChapter = async (slug: string) => {
         chapter_number: "asc",
       },
       select: {
-        slug:true,
+        slug: true,
         chapter_number: true,
-      }
+      },
     });
 
     const chapterIndex = chapters.findIndex((chapter) => chapter.slug === slug);
     const prevChapter = chapters[chapterIndex - 1];
     const nextChapter = chapters[chapterIndex + 1];
-   
+
     return {
-      prev : prevChapter || null,
-      next : nextChapter || null
+      prev: prevChapter || null,
+      next: nextChapter || null,
     };
   } catch (error) {
     console.error("Error fetching chapter:", error);
-    return error
+    return error;
   } finally {
     await prisma.$disconnect();
   }
@@ -131,7 +146,6 @@ export const chapterTitle = async (slug: string) => {
   }
 };
 
-
 export const allSlugOnly = async () => {
   try {
     const chapters = await prisma.chapter.findMany({
@@ -139,12 +153,12 @@ export const allSlugOnly = async () => {
         slug: true,
         updatedAt: true,
       },
-    })
-    return chapters
+    });
+    return chapters;
   } catch (error) {
     console.error("Error fetching chapter:", error);
     return { error: "An error occurred while fetching the chapter." };
-  }finally{
+  } finally {
     await prisma.$disconnect();
   }
-}
+};

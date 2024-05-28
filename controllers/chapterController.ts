@@ -3,6 +3,7 @@ import {
   ChapterBySlug,
   prevNextChapter,
   chapterTitle,
+  isSlugExists
 } from "../models/chapter";
 
 export const addChapter = async (c: any) => {
@@ -16,7 +17,16 @@ export const addChapter = async (c: any) => {
     200
   );
 };
-
+export const checkChapterSlug = async (c: any) => {
+  const {title} = await c.req.json();
+  const exists = await isSlugExists(title);
+  return c.json(
+    {
+      exists,
+    },
+    200
+  );
+}
 export const getChapterBySlug = async (c: any) => {
   const slug = await c.req.param("slug");
   const Chapter = await ChapterBySlug(slug);

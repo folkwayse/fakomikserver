@@ -3,10 +3,12 @@
     "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.583.0",
     "@hono/node-server": "^1.11.1",
     "@prisma/client": "5.13.0",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
+    "got": "^14.3.0",
     "hono": "^4.3.6",
     "minio": "^8.0.0",
     "prisma": "^5.13.0",

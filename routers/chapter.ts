@@ -3,11 +3,14 @@ import {
   addChapter,
   getChapterBySlug,
   getPrevNextChapter,
-  getTitle
+  getTitle,
+  checkChapterSlug
 } from "../controllers/chapterController";
 
 const chapters = new Hono();
-
+chapters.post("/checkslug", async (c) => {
+  return await checkChapterSlug(c);
+});
 chapters.get("/getchapter/:slug", async (c) => {
   return await getChapterBySlug(c);
 });
@@ -21,5 +24,6 @@ chapters.get("/gettitle/:slug", async (c) => {
 chapters.post("/:mangaId", async (c) => {
   return await addChapter(c);
 });
+
 
 export default chapters;
