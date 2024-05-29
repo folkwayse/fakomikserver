@@ -1,5 +1,55 @@
 import { prisma } from "../utils/prisma";
 
+export const MangaByGenreSlug = async (slug: string, cursor: number): Promise<any> => {
+  try {
+
+    const take = 24;
+    const genre = await prisma.genre.findUnique({
+      where: {
+        slug,
+      },
+      include: {
+        manga: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          skip: cursor, // Menggunakan cursor untuk melompati data sebelumnya
+          take: take,
+        },
+      },
+    });
+
+    // Menghitung total data manga pada genre tertentu
+    const total = await prisma.manga.count({
+      where: {
+        genre: {
+          some: {
+            slug,
+          },
+        },
+      },
+    });
+
+    // Menghitung cursor untuk halaman berikutnya
+    const nextCursor = cursor + take >= total ? null : cursor + take;
+
+    // Menghitung cursor untuk halaman sebelumnya
+    const prevCursor = cursor - take < 0 ? null : cursor - take;
+
+    return {
+      genre,
+      total,
+      nextCursor,
+      prevCursor,
+    };
+  } catch (error) {
+    console.log(error);
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
 export const AllGenres = async (): Promise<any> => {
   try {
     return prisma.genre.findMany({
