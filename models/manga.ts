@@ -1,5 +1,6 @@
 import { prisma } from "../utils/prisma";
 import { makeAslug } from "../utils/slug";
+
 export const AllMangas = async (): Promise<any> => {
   try {
     return prisma.manga.findMany({
@@ -46,6 +47,25 @@ export const createNewManga = async (manga: any): Promise<any> => {
   }
 };
 
+export const MangaByIds = async (ids: string[]): Promise<any> => {
+  try {
+    const mangas = await prisma.manga.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+    return mangas;
+  } catch (error) {
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
 export const MangaById = async (id: string): Promise<any> => {
   try {
     const manga = await prisma.manga.findUnique({
@@ -61,12 +81,11 @@ export const MangaById = async (id: string): Promise<any> => {
   }
 };
 
-export const newManga = async (cursor?: string): Promise<any> => {
+export const newManga = async (page: number = 1): Promise<any> => {
   try {
     const mangas = await prisma.manga.findMany({
       take: 24, // Limit to 24 items per page
-      skip: cursor ? 1 : 0, // Skip the cursor if it exists
-      cursor: cursor ? { id: cursor } : undefined, // Use cursor for pagination
+      skip: (page - 1) * 24,
       orderBy: {
         createdAt: "desc", // Order by createdAt
       },
@@ -79,15 +98,63 @@ export const newManga = async (cursor?: string): Promise<any> => {
         views: true,
         poster: true,
         createdAt: true,
+        updatedAt: true,
         slug: true,
       },
     });
 
     // Get the next cursor
     // const nextCursor = mangas.length === 24 ? mangas[23].id : null;
-
+    const total = await prisma.manga.count();
+    const nextPage =  page < Math.ceil(total / 24) ? page + 1 : null;
+    const prevPage = page > 1 ? page - 1 : null;
     return {
       mangas,
+      nextPage,
+      prevPage,
+      // nextCursor,
+    };
+  } catch (error) {
+    console.error("Error getting new manga:", error);
+
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+export const newChapter = async (page: number = 1): Promise<any> => {
+  try {
+    
+    const mangas = await prisma.manga.findMany({
+      take: 24, // Limit to 24 items per page
+      skip: (page - 1) * 24,
+      orderBy: {
+        updatedAt: "desc", // Order by createdAt
+      },
+      select: {
+        title: true,
+        type: true,
+        status: true,
+        last_chapters: true,
+        rating: true,
+        views: true,
+        poster: true,
+        createdAt: true,
+        updatedAt: true,
+        slug: true,
+      },
+    });
+
+    // Get the next cursor
+    // const nextCursor = mangas.length === 24 ? mangas[23].id : null;
+    const total = await prisma.manga.count();
+    const nextPage =  page < Math.ceil(total / 24) ? page + 1 : null;
+    const prevPage = page > 1 ? page - 1 : null;
+    return {
+      mangas,
+      nextPage,
+      prevPage,
+      
       // nextCursor,
     };
   } catch (error) {
@@ -138,9 +205,8 @@ export const mangaByName = async (s: string): Promise<any> => {
       where: {
         title: {
           contains: s,
-          mode: 'insensitive', 
+          mode: "insensitive",
         },
-
       },
       select: {
         title: true,

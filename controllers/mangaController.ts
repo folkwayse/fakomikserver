@@ -2,17 +2,29 @@ import {
   AllMangas,
   createNewManga,
   MangaById,
+  MangaByIds,
   newManga,
   mangaBySlug,
-  mangaByName
+  mangaByName,
+  newChapter,
+
 } from "../models/manga";
 
+
+
 export const searchByName = async (c: any) => {
-  const {s} = await c.req.json();
+  const { s } = await c.req.json();
   // console.log(s)
   const mangas = await mangaByName(s);
   return c.json(mangas, 200);
-}
+};
+
+export const getBookmark = async (c: any) => {
+  const { mangaIds } = await c.req.json();
+
+  const mangas = await MangaByIds(mangaIds);
+  return c.json(mangas, 200);
+};
 export const getMangas = async (c: any) => {
   const genres = await AllMangas();
   return c.json(genres, 200);
@@ -40,7 +52,19 @@ export const createManga = async (c: any) => {
 
 export const getNewManga = async (c: any) => {
   try {
-    const mangas = await newManga();
+    // cursor
+    const page =parseInt( await c.req.query('page') ?? 1 );  // Mengambil nilai cursor dari parameter URL dan mengonversinya menjadi angka
+    const mangas = await newManga(page);
+    return c.json(mangas, 200);
+  } catch (error) {
+    return c.json(error, 500);
+  }
+};
+export const getNewChapter = async (c: any) => {
+  try {
+    // cursor
+    const page = parseInt(await c.req.query('page') ?? 1);  // Mengambil nilai cursor dari parameter URL dan mengonversinya menjadi angka
+    const mangas = await newChapter(page);
     return c.json(mangas, 200);
   } catch (error) {
     return c.json(error, 500);

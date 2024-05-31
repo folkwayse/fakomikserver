@@ -5,7 +5,10 @@ import {
   getMangaById,
   getNewManga,
   getMangaBySlug,
-  searchByName
+  searchByName,
+  getBookmark,
+  getNewChapter
+  
 } from "../controllers/mangaController";
 import { addChapter } from "../controllers/chapterController";
 
@@ -14,12 +17,23 @@ const mangas = new Hono();
 mangas.get("/", async (c) => {
   return await getMangas(c);
 });
+
+mangas.post("/getbookmark", async (c) => {
+  
+  return await getBookmark(c);
+});
+
+
 mangas.get("/newmanga", async (c) => {
   return await getNewManga(c);
+});
+mangas.get("/newchapter", async (c) => {
+  return await getNewChapter(c);
 });
 mangas.post("/searchbyname", async (c) => {
   return await searchByName(c);
 });
+
 mangas.get("/getmanga/:slug", async (c) => {
   return await getMangaBySlug(c);
 });
