@@ -1,6 +1,74 @@
 import { prisma } from "../utils/prisma";
 import { makeAslug } from "../utils/slug";
 
+
+export const advSearch = async (data: any): Promise<any> => {
+  try {
+    // Set default sorting field if sortyBy is null or undefined
+    let sortField;
+    switch (data.sortyBy) {
+      case "release":
+        sortField = "release_year";
+        break;
+      case "rating":
+        sortField = "rating";
+        break;
+      case "popularity":
+        sortField = "views";
+        break;
+      case "update":
+        sortField = "updatedAt";
+        break;
+      case "terbaru":
+        sortField = "createdAt";
+        break;
+      default:
+        sortField = "updatedAt";
+        break;
+    }
+
+    const genres = data.genres.map((genre: any) => genre.name);
+
+    // Build the where clause
+    const whereClause: any = {
+      OR: genres.map((genre: string) => ({
+        genre: {
+          some: {
+            name: genre
+          }
+        }
+      })),
+    };
+
+    // Add type to the where clause if it's provided
+    if (data.type) {
+      whereClause.type = {
+        contains: data.type,
+        mode: 'insensitive'
+      };
+    }
+
+    return await prisma.manga.findMany({
+      where: whereClause,
+      include: {
+        genre: {
+          select: {
+            name: true,
+            slug: true
+          }
+        }
+      },
+      orderBy: {
+        [sortField]: 'desc' // or 'asc' depending on your sorting requirement
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
 export const AllMangas = async (): Promise<any> => {
   try {
     return prisma.manga.findMany({

@@ -7,11 +7,15 @@ import {
   mangaBySlug,
   mangaByName,
   newChapter,
-
+  advSearch
 } from "../models/manga";
 
 
-
+export const advanceSearch = async (c: any) => {
+  const jsonData = await c.req.json();
+  const mangas = await advSearch(jsonData);
+  return c.json(mangas, 200);
+}
 export const searchByName = async (c: any) => {
   const { s } = await c.req.json();
   // console.log(s)

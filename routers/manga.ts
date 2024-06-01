@@ -7,7 +7,8 @@ import {
   getMangaBySlug,
   searchByName,
   getBookmark,
-  getNewChapter
+  getNewChapter,
+  advanceSearch
   
 } from "../controllers/mangaController";
 import { addChapter } from "../controllers/chapterController";
@@ -33,7 +34,9 @@ mangas.get("/newchapter", async (c) => {
 mangas.post("/searchbyname", async (c) => {
   return await searchByName(c);
 });
-
+mangas.post("/advancesearch", async (c) => {
+  return await advanceSearch(c);
+});
 mangas.get("/getmanga/:slug", async (c) => {
   return await getMangaBySlug(c);
 });
