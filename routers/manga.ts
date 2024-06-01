@@ -8,7 +8,8 @@ import {
   searchByName,
   getBookmark,
   getNewChapter,
-  advanceSearch
+  advanceSearch,
+  hasUpdate
   
 } from "../controllers/mangaController";
 import { addChapter } from "../controllers/chapterController";
@@ -24,7 +25,9 @@ mangas.post("/getbookmark", async (c) => {
   return await getBookmark(c);
 });
 
-
+mangas.post("/hasupdate", async (c) => {
+  return await hasUpdate(c);
+})
 mangas.get("/newmanga", async (c) => {
   return await getNewManga(c);
 });

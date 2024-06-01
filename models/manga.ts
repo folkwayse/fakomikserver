@@ -1,7 +1,36 @@
 import { prisma } from "../utils/prisma";
 import { makeAslug } from "../utils/slug";
 
-
+export const hasUpdateManga = async (updateData: any[]): Promise<any> => {
+  
+  try {
+    //update manga has_update to true
+    for (const data of updateData) {
+      const existingManga = await prisma.manga.findFirst({
+        where: {
+          slug: data.slug,
+          last_chapter_number: data.chapter_number
+        }
+      });
+      if (existingManga) {
+        await prisma.manga.update({
+          where: {
+            slug: data.slug
+          },
+          data: {
+            has_update: true
+          }
+        });
+      }
+    }
+    
+    return true;
+  } catch (error) {
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
 export const advSearch = async (data: any): Promise<any> => {
   try {
     // Set default sorting field if sortyBy is null or undefined
@@ -34,9 +63,9 @@ export const advSearch = async (data: any): Promise<any> => {
       OR: genres.map((genre: string) => ({
         genre: {
           some: {
-            name: genre
-          }
-        }
+            name: genre,
+          },
+        },
       })),
     };
 
@@ -44,7 +73,7 @@ export const advSearch = async (data: any): Promise<any> => {
     if (data.type) {
       whereClause.type = {
         contains: data.type,
-        mode: 'insensitive'
+        mode: "insensitive",
       };
     }
 
@@ -54,13 +83,13 @@ export const advSearch = async (data: any): Promise<any> => {
         genre: {
           select: {
             name: true,
-            slug: true
-          }
-        }
+            slug: true,
+          },
+        },
       },
       orderBy: {
-        [sortField]: 'desc' // or 'asc' depending on your sorting requirement
-      }
+        [sortField]: "desc", // or 'asc' depending on your sorting requirement
+      },
     });
   } catch (error) {
     console.log(error);
@@ -68,7 +97,7 @@ export const advSearch = async (data: any): Promise<any> => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 export const AllMangas = async (): Promise<any> => {
   try {
     return prisma.manga.findMany({
@@ -174,7 +203,7 @@ export const newManga = async (page: number = 1): Promise<any> => {
     // Get the next cursor
     // const nextCursor = mangas.length === 24 ? mangas[23].id : null;
     const total = await prisma.manga.count();
-    const nextPage =  page < Math.ceil(total / 24) ? page + 1 : null;
+    const nextPage = page < Math.ceil(total / 24) ? page + 1 : null;
     const prevPage = page > 1 ? page - 1 : null;
     return {
       mangas,
@@ -192,7 +221,6 @@ export const newManga = async (page: number = 1): Promise<any> => {
 };
 export const newChapter = async (page: number = 1): Promise<any> => {
   try {
-    
     const mangas = await prisma.manga.findMany({
       take: 24, // Limit to 24 items per page
       skip: (page - 1) * 24,
@@ -216,13 +244,13 @@ export const newChapter = async (page: number = 1): Promise<any> => {
     // Get the next cursor
     // const nextCursor = mangas.length === 24 ? mangas[23].id : null;
     const total = await prisma.manga.count();
-    const nextPage =  page < Math.ceil(total / 24) ? page + 1 : null;
+    const nextPage = page < Math.ceil(total / 24) ? page + 1 : null;
     const prevPage = page > 1 ? page - 1 : null;
     return {
       mangas,
       nextPage,
       prevPage,
-      
+
       // nextCursor,
     };
   } catch (error) {

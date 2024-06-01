@@ -7,10 +7,16 @@ import {
   mangaBySlug,
   mangaByName,
   newChapter,
-  advSearch
+  advSearch,
+  hasUpdateManga
 } from "../models/manga";
 
-
+export const hasUpdate = async (c: any) => {
+  const {updateData} = await c.req.json();
+  // console.log(data)
+  const manga = await hasUpdateManga(updateData);
+  return c.json(manga, 200);
+}
 export const advanceSearch = async (c: any) => {
   const jsonData = await c.req.json();
   const mangas = await advSearch(jsonData);

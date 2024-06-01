@@ -19,6 +19,8 @@ export const addNewChapter = async (mangaId: string, data: any) => {
       },
       data: {
         last_chapters: chapter.name,
+        last_chapter_number: chapter.chapter_number,
+        has_update: false,
       },
     });
   } catch (error) {

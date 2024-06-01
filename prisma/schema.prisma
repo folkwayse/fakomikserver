@@ -15,28 +15,30 @@ datasource db {
 
 // 1. Manga table migration
 model Manga {
-  id                String    @id @default(uuid())
-  poster            String
-  title             String
-  language          String
-  alternative_title String
-  rating            Float
-  description       String
-  start_chapters    String
-  last_chapters     String
-  status            String
-  type              String
-  release_year      Int
-  author            String
-  artist            String
-  serialization     String
-  views             Int
-  slug              String    @unique
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  genre             Genre[]
-  chapter           Chapter[]
-  History           History[]
+  id                  String    @id @default(uuid())
+  poster              String
+  title               String
+  language            String
+  alternative_title   String
+  rating              Float
+  description         String
+  start_chapters      String
+  last_chapters       String
+  status              String
+  type                String
+  release_year        Int
+  author              String
+  artist              String
+  serialization       String
+  views               Int
+  has_update          Boolean   @default(false)
+  last_chapter_number Float     @default(0)
+  slug                String    @unique
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  genre               Genre[]
+  chapter             Chapter[]
+  History             History[]
 }
 
 // 2. Genre table migration
