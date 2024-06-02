@@ -31,6 +31,7 @@ export const uploadfromurl = async (c: any) => {
       method: "get",
       url: url,
       responseType: "arraybuffer",
+      maxContentLength: Infinity, // Disable the content length limit
     });
 
     // Get the file buffer
