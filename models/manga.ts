@@ -62,7 +62,7 @@ export const advSearch = async (data: any): Promise<any> => {
 
     // Build the where clause
     const whereClause: any = {
-      OR: genres.map((genre: string) => ({
+      AND: genres.map((genre: string) => ({
         genre: {
           some: {
             name: genre,
