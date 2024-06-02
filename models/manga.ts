@@ -9,7 +9,9 @@ export const hasUpdateManga = async (updateData: any[]): Promise<any> => {
       const existingManga = await prisma.manga.findFirst({
         where: {
           slug: data.slug,
-          last_chapter_number: data.chapter_number
+          last_chapter_number: {
+            not: data.chapter_number
+          }
         }
       });
       if (existingManga) {
