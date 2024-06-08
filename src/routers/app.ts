@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { html, raw } from "hono/html";
-import Head from "../views/head"
+
 
 const appRoutes = new Hono();
 
@@ -19,8 +19,7 @@ const Footer = () => html`
 
 
 appRoutes.get("/", (c) => {
-  const messages = ["Good Morning", "Good Evening", "Good Night"];
-  return c.html(Head());
+  return c.text('hello from server');
 });
 
 export default appRoutes;

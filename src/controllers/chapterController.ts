@@ -42,12 +42,22 @@ export const getPrevNextChapter = async (c: any) => {
   const slug = await c.req.param("slug");
   const data  = await prevNextChapter(slug);
   
-  return c.json(
-    {
-      ...data
-    },
-    200
-  );
+  if (typeof data === "object" && data !== null) {
+    return c.json(
+      {
+        ...data
+      },
+      200
+    );
+  } else {
+    // Handle the case when data is not an object
+    return c.json(
+      {
+        error: "Invalid data"
+      },
+      400
+    );
+  }
 };
 
 export const getTitle = async (c: any) => {

@@ -732,10 +732,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.20.2.tgz#9c907b21e30a52db959ba4f80bb01a0cc403d5cc"
   integrity sha512-N49X4lJX27+l9jbLKSqZ6bKNjzQvHaT8IIFUy+YIqmXQdjYCToGWwOItDrfby14c78aDd5NHQl29xingXfCdLQ==
 
-"@hono/node-server@^1.11.1":
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/@hono/node-server/-/node-server-1.11.1.tgz#f4c7bea7f3d52760b1950d6b8aeb900cc59142d3"
-  integrity sha512-GW1Iomhmm1o4Z+X57xGby8A35Cu9UZLL7pSMdqDBkD99U5cywff8F+8hLk5aBTzNubnsFAvWQ/fZjNwPsEn9lA==
+"@hono/node-server@^1.11.2":
+  version "1.11.2"
+  resolved "https://registry.yarnpkg.com/@hono/node-server/-/node-server-1.11.2.tgz#260df84dece220a50ee2c2a469d24df223095b9d"
+  integrity sha512-JhX0nUC66GeDxpIdMKWDRMEwtQBa64CY907iAF1sYqb4m2p2PdSU7zkbnNhAZLg/6IjSlTuj6CF307JlBXVvpg==
 
 "@img/sharp-darwin-arm64@0.33.4":
   version "0.33.4"
@@ -1734,10 +1734,10 @@ hasown@^2.0.0:
   dependencies:
     function-bind "^1.1.2"
 
-hono@^4.3.6:
-  version "4.3.7"
-  resolved "https://registry.yarnpkg.com/hono/-/hono-4.3.7.tgz#259196a64b586100f83b434ad395146a941d534a"
-  integrity sha512-GXlsGnCAwGosu+COwYyYC8MwOY2L6Ihg9V1znYdMD8DHCJl+13Nk4o8dsBYJpae4oujjw24jBaITuYWVq2+V8Q==
+hono@^4.4.4:
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/hono/-/hono-4.4.4.tgz#60eda24bd63dfb379735b9d924016c3c7b1bb329"
+  integrity sha512-zO5+4K8yf1iuKhBZhwmpZ/0LzPMr8Zt1RugEGM1xvOqgh9DyLb7tslOtoBks4bmm5bIcLtzLCXUpYpXOkwpABA==
 
 http-cache-semantics@^4.1.1:
   version "4.1.1"

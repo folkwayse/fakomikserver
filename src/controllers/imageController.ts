@@ -11,7 +11,6 @@ import { v4 as uuidv4 } from "uuid";
 //   secretKey: process.env.MINIO_SECRET_KEY || 'default',
 // });
 
-
 const s3Client = new S3Client({
   region: "default",
   endpoint: process.env.ENDPOINT, // Contabo S3 endpoint
@@ -51,8 +50,9 @@ export const uploadfromurl = async (c: any) => {
       Bucket: "fakomik",
       Key: filename,
       Body: buffer,
-      ACL: "public-read", // Adjust according to your needs
+      ACL: 'public-read' as any, // Adjust according to your needs
     };
+    
     const ress = await s3Client.send(new PutObjectCommand(putObjectParams));
     // console.log(ress)
     // Respond with success

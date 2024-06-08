@@ -9,10 +9,8 @@ import chapters from "./routers/chapter";
 import kiryu from "./routers/kiryu";
 import sitemaps from "./routers/sitemaps";
 import appRoutes from "./routers/app";
-
 const api = new Hono().basePath("/api");
 const app = new Hono();
-
 // app.get("/", (c) => {
 //   return c.text("Hello Hono!");
 // });
@@ -25,12 +23,9 @@ api.route("/chapters", chapters);
 api.route("/kiryu", kiryu);
 api.route("/sitemaps", sitemaps);
 app.route("/", api);
-
 const port = parseInt(process.env.PORT || "3000") || 3000;
-
 console.log(`Server is running on port ${port}`);
-
 serve({
-  fetch: app.fetch,
-  port,
+    fetch: app.fetch,
+    port,
 });
