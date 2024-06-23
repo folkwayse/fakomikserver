@@ -118,16 +118,19 @@ export const prevNextChapter = async (slug: string) => {
 };
 const incementViews = async (id: string): Promise<void> => {
  try {
-  await prisma.manga.update({
-    where: {
-      id: id,
-    },
-    data: {
-      views: {
-        increment: 1,
-      },
-    },
-  });
+  // await prisma.manga.update({
+  //   where: {
+  //     id: id,
+  //   },
+  //   data: {
+  //     views: {
+  //       increment: 1,
+  //     },
+  //   },
+  // });
+  const query = `UPDATE "Manga" SET "views" = "views" + 1 WHERE "id" = $1`;
+
+  await prisma.$executeRawUnsafe(query, id);
   return;
  } catch (error) {
   console.error("Error incrementing views:", error);
