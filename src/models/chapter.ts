@@ -116,6 +116,29 @@ export const prevNextChapter = async (slug: string) => {
     await prisma.$disconnect();
   }
 };
+const incementViews = async (id: string): Promise<void> => {
+ try {
+  await prisma.manga.update({
+    where: {
+      id: id,
+    },
+    data: {
+      views: {
+        increment: 1,
+      },
+    },
+  });
+  return;
+ } catch (error) {
+  console.error("Error incrementing views:", error);
+  return;
+ }finally {
+  await prisma.$disconnect();
+ }
+
+  // console.log(id);
+  return;
+};
 
 export const chapterTitle = async (slug: string) => {
   try {
@@ -133,7 +156,9 @@ export const chapterTitle = async (slug: string) => {
     if (!chapter) {
       throw new Error(`Chapter with slug '${slug}' not found.`);
     }
-
+    // add increment view
+    // console.log(chapter.manga.id);
+    incementViews(chapter.manga.id);
     return chapter;
   } catch (error) {
     console.error("Error fetching chapter:", error);
