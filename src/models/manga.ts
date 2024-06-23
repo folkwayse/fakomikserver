@@ -193,7 +193,7 @@ export const newManga = async (page: number = 1): Promise<any> => {
       //   type: true,
       //   status: true,
       //   last_chapters: true,
-        
+      
       //   rating: true,
       //   views: true,
       //   poster: true,
