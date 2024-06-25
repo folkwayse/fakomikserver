@@ -2,7 +2,6 @@ import { prisma } from "../utils/prisma";
 import { makeAslug } from "../utils/slug";
 
 export const hasUpdateManga = async (updateData: any[]): Promise<any> => {
-  
   try {
     //update manga has_update to true
     for (const data of updateData) {
@@ -10,22 +9,22 @@ export const hasUpdateManga = async (updateData: any[]): Promise<any> => {
         where: {
           slug: data.slug,
           last_chapter_number: {
-            not: data.chapter_number
-          }
-        }
+            not: data.chapter_number,
+          },
+        },
       });
       if (existingManga) {
         await prisma.manga.update({
           where: {
-            slug: data.slug
+            slug: data.slug,
           },
           data: {
-            has_update: true
-          }
+            has_update: true,
+          },
         });
       }
     }
-    
+
     return true;
   } catch (error) {
     return error;
@@ -193,13 +192,24 @@ export const newManga = async (page: number = 1): Promise<any> => {
         type: true,
         status: true,
         last_chapters: true,
-      
+
         rating: true,
         views: true,
         poster: true,
         createdAt: true,
         updatedAt: true,
         slug: true,
+        chapter: {
+          take: 2,
+          orderBy: {
+            chapter_number: "desc",
+          },
+          select: {
+            chapter_number: true,
+            // name: true,
+            slug: true,
+          },
+        },
       },
     });
 
@@ -242,6 +252,17 @@ export const newChapter = async (page: number = 1): Promise<any> => {
         createdAt: true,
         updatedAt: true,
         slug: true,
+        chapter: {
+          take: 2,
+          orderBy: {
+            chapter_number: "desc",
+          },
+          select: {
+            chapter_number: true,
+            // name: true,
+            slug: true,
+          },
+        },
       },
     });
 
