@@ -188,19 +188,19 @@ export const newManga = async (page: number = 1): Promise<any> => {
       orderBy: {
         createdAt: "desc", // Order by createdAt
       },
-      // select: {
-      //   title: true,
-      //   type: true,
-      //   status: true,
-      //   last_chapters: true,
+      select: {
+        title: true,
+        type: true,
+        status: true,
+        last_chapters: true,
       
-      //   rating: true,
-      //   views: true,
-      //   poster: true,
-      //   createdAt: true,
-      //   updatedAt: true,
-      //   slug: true,
-      // },
+        rating: true,
+        views: true,
+        poster: true,
+        createdAt: true,
+        updatedAt: true,
+        slug: true,
+      },
     });
 
     // Get the next cursor
@@ -230,19 +230,19 @@ export const newChapter = async (page: number = 1): Promise<any> => {
       orderBy: {
         updatedAt: "desc", // Order by createdAt
       },
-      // select: {
-      //   title: true,
-      //   type: true,
-      //   status: true,
-      //   last_chapters: true,
-      //   last_chapter_number: true,
-      //   rating: true,
-      //   views: true,
-      //   poster: true,
-      //   createdAt: true,
-      //   updatedAt: true,
-      //   slug: true,
-      // },
+      select: {
+        title: true,
+        type: true,
+        status: true,
+        last_chapters: true,
+        last_chapter_number: true,
+        rating: true,
+        views: true,
+        poster: true,
+        createdAt: true,
+        updatedAt: true,
+        slug: true,
+      },
     });
 
     // Get the next cursor
@@ -314,7 +314,7 @@ export const mangaByName = async (s: string): Promise<any> => {
         // status: true,
         last_chapters: true,
         rating: true,
-        // views: true,
+        views: true,
         poster: true,
         // createdAt: true,
         slug: true,

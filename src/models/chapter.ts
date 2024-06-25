@@ -1,5 +1,40 @@
 import { prisma } from "../utils/prisma";
 import { makeAslug } from "../utils/slug";
+
+export const getChapterList = async (slug: string) => {
+  try {
+    const thisCahpter = await prisma.chapter.findUnique({
+      where: {
+        slug,
+      },
+      select: {
+        manga_id: true,
+      },
+    });
+
+    if (!thisCahpter) {
+      return [];
+    }
+    // console.log(thisCahpter.manga_id);
+    const chapters = await prisma.chapter.findMany({
+      where: {
+        manga_id: thisCahpter?.manga_id,
+      },
+      select: {
+        slug: true,
+        chapter_number: true,
+      },
+      orderBy: {
+        chapter_number: "desc",
+      },
+    });
+    return chapters;
+  } catch (error) {
+    return error;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
 export const addNewChapter = async (mangaId: string, data: any) => {
   try {
     const slug = makeAslug(data.name);
@@ -32,7 +67,6 @@ export const addNewChapter = async (mangaId: string, data: any) => {
 };
 
 export const isSlugExists = async (title: string) => {
-
   try {
     const slug = makeAslug(title);
     const chapter = await prisma.chapter.findUnique({
@@ -117,27 +151,27 @@ export const prevNextChapter = async (slug: string) => {
   }
 };
 const incementViews = async (id: string): Promise<void> => {
- try {
-  // await prisma.manga.update({
-  //   where: {
-  //     id: id,
-  //   },
-  //   data: {
-  //     views: {
-  //       increment: 1,
-  //     },
-  //   },
-  // });
-  const query = `UPDATE "Manga" SET "views" = "views" + 1 WHERE "id" = $1`;
+  try {
+    // await prisma.manga.update({
+    //   where: {
+    //     id: id,
+    //   },
+    //   data: {
+    //     views: {
+    //       increment: 1,
+    //     },
+    //   },
+    // });
+    const query = `UPDATE "Manga" SET "views" = "views" + 1 WHERE "id" = $1`;
 
-  await prisma.$executeRawUnsafe(query, id);
-  return;
- } catch (error) {
-  console.error("Error incrementing views:", error);
-  return;
- }finally {
-  await prisma.$disconnect();
- }
+    await prisma.$executeRawUnsafe(query, id);
+    return;
+  } catch (error) {
+    console.error("Error incrementing views:", error);
+    return;
+  } finally {
+    await prisma.$disconnect();
+  }
 
   // console.log(id);
   return;
