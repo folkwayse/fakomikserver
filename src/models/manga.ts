@@ -1,6 +1,24 @@
 import { prisma } from "../utils/prisma";
 import { makeAslug } from "../utils/slug";
 
+
+export const allSlugManga = async () => {
+  try {
+    const chapters = await prisma.manga.findMany({
+      select: {
+        slug: true,
+        updatedAt: true,
+      },
+    });
+    return chapters;
+  } catch (error) {
+    console.error("Error fetching chapter:", error);
+    return [];
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
 export const hasUpdateManga = async (updateData: any[]): Promise<any> => {
   try {
     //update manga has_update to true

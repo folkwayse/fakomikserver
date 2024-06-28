@@ -1,5 +1,5 @@
 import { allSlugOnly } from "../models/chapter";
-
+import { allSlugManga } from "../models/manga";
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   return date.toISOString();
@@ -8,17 +8,24 @@ const formatDate = (dateString: string) => {
 export const getChapterUrl = async (c: any) => {
   try {
     const chapters = await allSlugOnly();
-    const baseUrl = c.req.query("baseUrl");
+    const mangas = await allSlugManga();
 
     if (Array.isArray(chapters)) {
       const urls = chapters.map((chapter: any) => ({
-        loc: `${baseUrl}/${chapter.slug}`,
+        loc: `/chapters/${chapter.slug}`,
         lastmod: formatDate(chapter.updatedAt),
-        changefreq: "weekly",
+        changefreq: "daily",
         priority: 0.8,
       }));
+      const urlsManga = mangas.map((manga: any) => ({
+        loc: `/manga/${manga.slug}`,
+        lastmod: formatDate(manga.updatedAt),
+        changefreq: "daily",
+        priority: 0.8,
+      }));
+      const combinedUrls = [ ...urlsManga, ...urls];
 
-      return c.json(urls, 200);
+      return c.json(combinedUrls, 200);
     } else {
       return c.json(chapters, 500);
     }
