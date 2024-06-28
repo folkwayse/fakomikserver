@@ -8,7 +8,7 @@ const formatDate = (dateString: string) => {
 export const getChapterUrl = async (c: any) => {
   try {
     const chapters = await allSlugOnly();
-    const baseUrl = c.req.param("baseUrl");
+    const baseUrl = c.req.query("baseUrl");
 
     if (Array.isArray(chapters)) {
       const urls = chapters.map((chapter: any) => ({
