@@ -8,13 +8,13 @@ const formatDate = (dateString: string) => {
 export const getChapterUrl = async (c: any) => {
   try {
     const chapters = await allSlugOnly();
-    
+    const baseUrl = c.req.param("baseUrl");
 
     if (Array.isArray(chapters)) {
       const urls = chapters.map((chapter: any) => ({
-        loc: `https://fakomik.cloud/chapters/${chapter.slug}`,
+        loc: `${baseUrl}/${chapter.slug}`,
         lastmod: formatDate(chapter.updatedAt),
-        changefreq: "daily",
+        changefreq: "weekly",
         priority: 0.8,
       }));
 
