@@ -6,19 +6,27 @@ const formatDate = (dateString: string) => {
 };
 
 export const getChapterUrl = async (c: any) => {
+  
   try {
-    const chapters = await allSlugOnly();
-    const mangas = await allSlugManga();
-
+    
+    const HostName = c.req.query("Host");
+    
+    const [chaptersPromise, mangasPromise] = await Promise.all([
+      allSlugOnly(),
+      allSlugManga()
+    ]);
+    
+    const chapters =  chaptersPromise;
+    const mangas =  mangasPromise;
     if (Array.isArray(chapters)) {
       const urls = chapters.map((chapter: any) => ({
-        loc: `/chapters/${chapter.slug}`,
+        loc: `${HostName}chapters/${chapter.slug}`,
         lastmod: formatDate(chapter.updatedAt),
         changefreq: "daily",
         priority: 0.8,
       }));
       const urlsManga = mangas.map((manga: any) => ({
-        loc: `/manga/${manga.slug}`,
+        loc: `${HostName}manga/${manga.slug}`,
         lastmod: formatDate(manga.updatedAt),
         changefreq: "daily",
         priority: 0.8,
@@ -30,6 +38,7 @@ export const getChapterUrl = async (c: any) => {
       return c.json(chapters, 500);
     }
   } catch (error) {
+    console.log(error);
     return c.json(error, 500);
   }
 };
